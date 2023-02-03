@@ -5,6 +5,7 @@ const scoreElement = document.getElementById("score");
 const pauseButton = document.getElementById("pause");
 const modal = document.getElementById("dialog");
 const resetButton = modal.querySelector("#reset");
+const soundGame = document.querySelector("audio");
 
 const columns = 10;
 const rows = 10;
@@ -12,6 +13,8 @@ let cells = [];
 let score = 0;
 let currentPosition = 0;
 let interval = null;
+
+//Snake movements 
 
 const snake = {
   positions: [(columns * rows) / 2],
@@ -79,23 +82,22 @@ const snake = {
   },
 };
 
+//The function ending the game
+
 function endGame() {
   clearInterval(interval);
   modal.showModal();
-
-  // alert();
-
-  // show game over popup
-  // popup should have a restart button
-  // when restart is clicked, you reset the score and snake position. and then start game
 }
 
+//The function creating the grid
 function createTheGrid() {
   for (let i = 0; i < columns * rows; i++) {
     createCell();
   }
 }
 
+
+//Creating the the various cells of the grid
 function createCell() {
   const div = document.createElement("div");
   div.classList.add("cell");
@@ -103,6 +105,7 @@ function createCell() {
   cells.push(div);
 }
 
+//Creating the food and make it appear randomly
 function createFood(num) {
   const copyCells = [...cells];
   copyCells.splice(currentPosition, 1);
@@ -119,12 +122,15 @@ function createFood(num) {
   }
 }
 
+//Hiding the tail of the snake
 function displaySnake(shouldHide) {
   snake.positions.forEach((position) => {
     cells[position].classList[shouldHide ? "remove" : "add"]("snake");
   });
 }
 
+
+//Function starting the game
 function startTheGame() {
   score = 0;
   gridElement.innerHTML = "";
@@ -138,7 +144,7 @@ function startTheGame() {
   createFood(1);
   startButton.disabled = true;
 }
-//let theInterval;
+
 function refresh() {
   interval = setInterval(() => {
     displaySnake("hide");
@@ -148,7 +154,7 @@ function refresh() {
   }, 200);
 }
 
-//
+//Event listener setting the 
 
 window.addEventListener("keydown", (event) => {
   //console.log(event.code);
@@ -175,22 +181,18 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-// startTheGame();
 
 resetButton.addEventListener("click", () => {
-  scoreElement.textContent = '0';
+  scoreElement.textContent = "0";
   modal.close();
   startTheGame();
   refresh();
 });
-
+soundGame.play();
 startButton.addEventListener("click", () => {
   snake.positions;
   refresh();
   startTheGame();
-
 });
-
-
 
 function displayScore() {}
